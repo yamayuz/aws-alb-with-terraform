@@ -203,3 +203,6 @@ resource "aws_route_table_association" "private_association_1d" {
     subnet_id      = "${aws_subnet.nginx_private_subnet_1d.id}"
     route_table_id = "${aws_route_table.nginx_private_table_1d.id}"
 }
+
+
+

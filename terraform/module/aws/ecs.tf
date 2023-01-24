@@ -11,7 +11,7 @@ resource "aws_ecs_service" "nginx_ecs_service" {
     task_definition = "${aws_ecs_task_definition.nginx_ecs_task.arn}"
     health_check_grace_period_seconds = 3600
     network_configuration {
-        subnets  = ["${aws_subnet.nginx_private_subnet_1a.id}", "${aws_subnet.nginx_private_subnet_1c.id}", "${aws_subnet.nginx_private_subnet_1d.id}"]
+        subnets  = ["${aws_subnet.nginx_private_subnet_1a.id}"]
         security_groups = ["${aws_security_group.nginx_ecs_sec.id}"]
     }
     load_balancer {

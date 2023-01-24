@@ -37,33 +37,10 @@ resource "aws_subnet" "nginx_public_subnet_1c" {
     }
 }
 
-resource "aws_subnet" "nginx_public_subnet_1d" {
-    vpc_id = "${aws_vpc.nginx_vpc.id}"
-    availability_zone = "ap-northeast-1d"
-    cidr_block = "10.0.3.0/24"
-    tags = {
-        Name = "nginx-public-subnet-1d"
-    }
-}
-
 resource "aws_eip" "nginx_eip_1a" {
     vpc = true
     tags = {
         Name = "nginx-eip-1a"
-    }
-}
-
-resource "aws_eip" "nginx_eip_1c" {
-    vpc = true
-    tags = {
-        Name = "nginx-eip-1c"
-    }
-}
-
-resource "aws_eip" "nginx_eip_1d" {
-    vpc = true
-    tags = {
-        Name = "nginx-eip-1d"
     }
 }
 
@@ -72,22 +49,6 @@ resource "aws_nat_gateway" "nginx_nat_1a" {
     allocation_id = "${aws_eip.nginx_eip_1a.id}"
     tags = {
         Name = "nginx-nat-1a"
-    }
-}
-
-resource "aws_nat_gateway" "nginx_nat_1c" {
-    subnet_id = "${aws_subnet.nginx_public_subnet_1c.id}"
-    allocation_id = "${aws_eip.nginx_eip_1c.id}"
-    tags = {
-        Name = "nginx-nat-1c"
-    }
-}
-
-resource "aws_nat_gateway" "nginx_nat_1d" {
-    subnet_id = "${aws_subnet.nginx_public_subnet_1d.id}"
-    allocation_id = "${aws_eip.nginx_eip_1d.id}"
-    tags = {
-        Name = "nginx-nat-1d"
     }
 }
 
@@ -101,24 +62,6 @@ resource "aws_subnet" "nginx_private_subnet_1a" {
     cidr_block = "10.0.10.0/24"
     tags = {
         Name = "nginx-private-subnet-1a"
-    }
-}
-
-resource "aws_subnet" "nginx_private_subnet_1c" {
-    vpc_id = "${aws_vpc.nginx_vpc.id}"
-    availability_zone = "ap-northeast-1c"
-    cidr_block = "10.0.20.0/24"
-    tags = {
-        Name = "nginx-private-subnet-1c"
-    }
-}
-
-resource "aws_subnet" "nginx_private_subnet_1d" {
-    vpc_id = "${aws_vpc.nginx_vpc.id}"
-    availability_zone = "ap-northeast-1d"
-    cidr_block = "10.0.30.0/24"
-    tags = {
-        Name = "nginx-private-subnet-1d"
     }
 }
 
@@ -147,11 +90,6 @@ resource "aws_route_table_association" "public_association_1c" {
     route_table_id = "${aws_route_table.nginx_public_table.id}"
 }
 
-resource "aws_route_table_association" "public_association_1d" {
-    subnet_id      = "${aws_subnet.nginx_public_subnet_1d.id}"
-    route_table_id = "${aws_route_table.nginx_public_table.id}"
-}
-
 
 # -----------------------------------------------
 # route (Nat Gateway - Private Subnet)
@@ -167,41 +105,9 @@ resource "aws_route_table" "nginx_private_table_1a" {
     }
 }
 
-resource "aws_route_table" "nginx_private_table_1c" {
-    vpc_id = "${aws_vpc.nginx_vpc.id}"
-    route {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = "${aws_nat_gateway.nginx_nat_1c.id}"
-    }
-    tags = {
-        Name = "nginx-private-table-1c"
-    }
-}
-
-resource "aws_route_table" "nginx_private_table_1d" {
-    vpc_id = "${aws_vpc.nginx_vpc.id}"
-    route {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = "${aws_nat_gateway.nginx_nat_1d.id}"
-    }
-    tags = {
-        Name = "nginx-private-table-1d"
-    }
-}
-
 resource "aws_route_table_association" "private_association_1a" {
     subnet_id      = "${aws_subnet.nginx_private_subnet_1a.id}"
     route_table_id = "${aws_route_table.nginx_private_table_1a.id}"
-}
-
-resource "aws_route_table_association" "private_association_1c" {
-    subnet_id      = "${aws_subnet.nginx_private_subnet_1c.id}"
-    route_table_id = "${aws_route_table.nginx_private_table_1c.id}"
-}
-
-resource "aws_route_table_association" "private_association_1d" {
-    subnet_id      = "${aws_subnet.nginx_private_subnet_1d.id}"
-    route_table_id = "${aws_route_table.nginx_private_table_1d.id}"
 }
 
 

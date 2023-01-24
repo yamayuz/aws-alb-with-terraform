@@ -1,7 +1,7 @@
 resource "aws_alb" "nginx_alb" {
     name = "nginx-load-balancer"
     security_groups = ["${aws_security_group.nginx_alb_sec.id}"]
-    subnets = ["${aws_subnet.nginx_public_subnet_1a.id}", "${aws_subnet.nginx_public_subnet_1c.id}", "${aws_subnet.nginx_public_subnet_1d.id}"]
+    subnets = ["${aws_subnet.nginx_public_subnet_1a.id}", "${aws_subnet.nginx_public_subnet_1c.id}"]
 }
 
 resource "aws_alb_listener" "nginx_alb_listener" {

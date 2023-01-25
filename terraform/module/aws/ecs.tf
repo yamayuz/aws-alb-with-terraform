@@ -23,22 +23,16 @@ resource "aws_ecs_service" "nginx_ecs_service" {
 
 resource "aws_ecs_task_definition" "nginx_ecs_task" {
     family = "nginx"
+    execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
     requires_compatibilities = ["FARGATE"]
     cpu = "256"
     memory = "512"
     network_mode = "awsvpc"
-    container_definitions = <<EOL
-    [
-        {
-            "name": "nginx",
-            "image": "nginx:1.18",
-            "portMappings": [
-                {
-                    "containerPort": 80,
-                    "hostPort": 80
-                }
-            ]
-        }
-    ]
-    EOL
+    volume {
+        name = "phpsocket"
+    }
+    container_definitions = data.template_file.ecs_taskdef.rendered
+    lifecycle {
+        ignore_changes = [container_definitions]
+    }
 }

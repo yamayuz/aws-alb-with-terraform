@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+
+  nginx:
+    build:
+      context: .
+      target: nginx
+    ports:
+      - '8000:80'
+    volumes:
+      - ./src:/var/www/html

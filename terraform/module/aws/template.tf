@@ -5,3 +5,15 @@ data "aws_route53_zone" "nginx_route53_zone" {
     name = "${var.domain}"
     private_zone = false
 }
+
+
+# -----------------------------------------------
+# ecs task
+# -----------------------------------------------
+data "template_file" "ecs_taskdef" {
+    template = file("../module/aws/json/ecs_taskdef.json")
+    vars = {
+        nginx_log_group = aws_cloudwatch_log_group.nginx_log_group.name
+        nginx_image_repository_url = aws_ecr_repository.nginx_ecr_repository.repository_url
+    }
+}
